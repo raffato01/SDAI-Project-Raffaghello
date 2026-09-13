@@ -1,0 +1,23 @@
+module mars_project
+
+ontology MarsOntology
+
+    action DoNextSlot
+
+    action DoMoveTowards(targetX as integer, targetY as integer)
+
+    action DoPick
+
+    action DoDrop
+
+    action DoBurn
+
+    predicate Percepts(myX as integer, myY as integer, r2X as integer, r2Y as integer, hasGarbage as boolean)
+    
+    proposition PickedSuccessfully
+
+    proposition PickFailed
+
+    proposition GarbageAtBase
+
+    proposition ActionCompleted

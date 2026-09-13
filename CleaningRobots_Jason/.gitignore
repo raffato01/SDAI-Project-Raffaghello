@@ -1,0 +1,19 @@
+# Build & Class files
+bin/
+build/
+.gradle/
+
+# OS Junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+.project
+.classpath
+.settings/
+*.iml
+
+# Logs
+*.log

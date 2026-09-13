@@ -1,0 +1,5 @@
+
+agent scanner_agent
+    on create with args as list of text do
+        log "Agent 'scanner_agent' created with arguments: "+args
+        

@@ -1,0 +1,120 @@
+module mars_project
+
+agent PatrolAgent uses ontology MarsOntology
+
+    property myX as integer = 0
+    property myY as integer = 4
+
+    property r2X as integer = 3
+    property r2Y as integer = 3
+
+    property lastX as integer = 0
+    property lastY as integer = 4
+
+    on create do
+        log "r3 (PatrolAgent) started [Modular Behaviours]. Scanning rows 4-6."
+        activate PatrolGrid
+
+cyclic behavior PatrolGrid
+    for agent PatrolAgent
+    uses ontology mars_project.MarsOntology
+
+    property waitingPercepts as boolean = false
+
+    on activate do
+        waitingPercepts = false
+
+    on execute do
+        if not waitingPercepts do
+            waitingPercepts = true
+            send message request DoNextSlot to "environment"@
+
+    on message inform Percepts(x, y, rx, ry, hasGarb) do
+        waitingPercepts = false
+        myX of agent = x
+        myY of agent = y
+        r2X of agent = rx
+        r2Y of agent = ry
+
+        if (myY of agent) >= 7 do
+            log "r3: Scan finished."
+            deactivate this
+        else if hasGarb do
+            log "r3: Garbage found at (" + (myX of agent) as text + "," + (myY of agent) as text + ")"
+            lastX of agent = myX of agent
+            lastY of agent = myY of agent
+            deactivate this
+            activate PatrolPickGarbage
+
+cyclic behavior PatrolPickGarbage
+    for agent PatrolAgent
+    uses ontology mars_project.MarsOntology
+
+    on activate do
+        log "r3: Attempting to pick garbage..."
+        send message request DoPick to "environment"@
+
+    on message inform PickedSuccessfully do
+        log "r3: Garbage picked up! Heading to r2..."
+        deactivate this
+        activate PatrolDeliverToR2
+
+    on message inform PickFailed do
+        log "r3: Pick failed, retrying..."
+        send message request DoPick to "environment"@
+
+cyclic behavior PatrolDeliverToR2
+    for agent PatrolAgent
+    uses ontology mars_project.MarsOntology
+
+    property waitingPercepts as boolean = false
+    property waitingDrop as boolean = false
+
+    on activate do
+        waitingPercepts = false
+        waitingDrop = false
+
+    on execute do
+        if not waitingPercepts and not waitingDrop do
+            if ((myX of agent) = (r2X of agent) and (myY of agent) = (r2Y of agent)) do
+                waitingDrop = true
+                send message request DoDrop to "environment"@
+            else do
+                waitingPercepts = true
+                send message request DoMoveTowards(r2X of agent, r2Y of agent) to "environment"@
+
+    on message inform Percepts(x, y, rx, ry, hasGarb) do
+        waitingPercepts = false
+        myX of agent = x
+        myY of agent = y
+
+    on message inform ActionCompleted do
+        if waitingDrop do
+            log "r3: Garbage delivered to r2. Returning to last position..."
+            waitingDrop = false
+            deactivate this
+            activate PatrolReturnToLast
+
+cyclic behavior PatrolReturnToLast
+    for agent PatrolAgent
+    uses ontology mars_project.MarsOntology
+
+    property waitingPercepts as boolean = false
+
+    on activate do
+        waitingPercepts = false
+
+    on execute do
+        if not waitingPercepts do
+            if ((myX of agent) = (lastX of agent) and (myY of agent) = (lastY of agent)) do
+                log "r3: Returned to (" + (lastX of agent) as text + "," + (lastY of agent) as text + "). Resuming scan."
+                deactivate this
+                activate PatrolGrid
+            else do
+                waitingPercepts = true
+                send message request DoMoveTowards(lastX of agent, lastY of agent) to "environment"@
+
+    on message inform Percepts(x, y, rx, ry, hasGarb) do
+        waitingPercepts = false
+        myX of agent = x
+        myY of agent = y

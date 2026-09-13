@@ -1,0 +1,14 @@
+INDEX VERSION 1.134+C:\Users\Tommaso\Desktop\ConsegnaSdai\.metadata\.plugins\org.eclipse.jdt.core
+3321004107.index
+2328269416.index
+3856081202.index
+2817474630.index
+953225815.index
+1865797976.index
+3026504202.index
+2157838217.index
+717490177.index
+1764012933.index
+3002545528.index
+3902328681.index
+1929123214.index

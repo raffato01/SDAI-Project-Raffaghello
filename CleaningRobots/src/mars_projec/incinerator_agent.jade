@@ -1,0 +1,17 @@
+module mars_project
+
+agent IncineratorAgent uses ontology MarsOntology
+    on create do
+        log "r2 (IncineratorAgent) started. Waiting at grid centre."
+        activate WaitForGarbage
+
+cyclic behavior WaitForGarbage 
+    for agent IncineratorAgent
+    uses ontology mars_project.MarsOntology
+    
+    on message inform GarbageAtBase do
+        log "r2: Garbage detected at base! Burning..."
+        send message request DoBurn to "environment"@
+
+    on message inform ActionCompleted do
+        log "r2: Garbage burned successfully!"

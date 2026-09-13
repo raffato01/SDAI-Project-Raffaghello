@@ -1,0 +1,5 @@
+
+agent incinerator_agent
+    on create with args as list of text do
+        log "Agent 'incinerator_agent' created with arguments: "+args
+        

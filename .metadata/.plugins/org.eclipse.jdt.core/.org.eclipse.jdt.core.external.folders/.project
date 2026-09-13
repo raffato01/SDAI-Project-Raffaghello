@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>.org.eclipse.jdt.core.external.folders</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.link1</name>
+			<type>2</type>
+			<location>C:/Users/Tommaso/.p2/pool/plugins/it.unipr.ailab.jadescript_1.0.0.202305041718</location>
+		</link>
+	</linkedResources>
+</projectDescription>

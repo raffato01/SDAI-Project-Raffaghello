@@ -1,0 +1,48 @@
+/*
+   Cleaning Robots (Jason MAS Application)
+   Standalone Gradle build file
+*/
+
+plugins {
+    id 'java'
+}
+
+defaultTasks 'run'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    // Self-contained libraries (offline execution supported)
+    implementation fileTree(dir: 'lib', include: '*.jar')
+    // Standard javax.json runtime fallback
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.glassfish:javax.json:1.1.4'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '.'
+            exclude 'build/**', 'bin/**', 'lib/**', 'doc/**', 'gradle/**'
+        }
+    }
+}
+
+task run (type: JavaExec, dependsOn: 'classes') {
+    group = 'Jason'
+    description = 'Avvia la simulazione Jason Cleaning Robots'
+    mainClass = 'jason.infra.local.RunLocalMAS'
+    args = ['mars.mas2j']
+    classpath = sourceSets.main.runtimeClasspath
+    workingDir = projectDir
+
+    // Abilita la GUI Swing AWT
+    systemProperty 'java.awt.headless', 'false'
+    systemProperty 'java.util.logging.config.file', 'logging.properties'
+    jvmArgs '-Djava.awt.headless=false'
+}
