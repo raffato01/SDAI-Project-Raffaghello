@@ -9,14 +9,14 @@ echo "  Cleaning Robots - Jason MAS Simulation Launcher"
 echo "========================================================"
 
 if ! command -v java &> /dev/null; then
-    echo "[ERRORE] Java non è stato trovato nel PATH. Installa Java JDK 17 o superiore."
+    echo "[ERROR] Java was not found in the PATH. Install Java JDK 17 or later."
     exit 1
 fi
 
 mkdir -p bin
 
-echo "[*] Compilazione di MarsEnv.java..."
+echo "[*] Compiling MarsEnv.java..."
 javac -cp "lib/*" -d bin MarsEnv.java
 
-echo "[*] Avvio della simulazione Jason con interfaccia grafica..."
+echo "[*] Starting the Jason simulation with graphical interface..."
 java -cp "bin:lib/*" -Djava.util.logging.config.file=logging.properties jason.infra.local.RunLocalMAS mars.mas2j
