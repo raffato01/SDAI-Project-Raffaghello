@@ -150,7 +150,7 @@ public class MarsEnv extends Environment {
         }
 
         int scanLimitY(int agIdx) {
-            return (agIdx == 0) ? GSize / 2 : getHeight();
+            return (agIdx == 0) ? GSize / 2 + 1 : getHeight();
         }
 
         void nextSlot(int agIdx) throws Exception {
